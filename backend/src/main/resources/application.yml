@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: shadowing-backend
+  profiles:
+    active: local  # 운영 배포 시 prod 로 변경 (또는 환경변수 SPRING_PROFILES_ACTIVE=prod)
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+
+server:
+  port: 8080
