@@ -1,36 +1,24 @@
-import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useVideos } from '../hooks/useVideos'
+import { useScripts } from '../hooks/useScripts'
+import { usePlayer } from '../hooks/usePlayer'
 import VideoStage from '../components/player/VideoStage'
 import TransportBar from '../components/player/TransportBar'
 import SentenceList from '../components/player/SentenceList'
 import PlayerSidebar from '../components/player/PlayerSidebar'
-import type { Sentence } from '../types'
-
-// TODO: 스크립트 API 연동 전까지 사용하는 더미 문장
-const DUMMY_SENTENCES: Sentence[] = [
-  { jp: 'おはよう。今日はいい天気だね。', reading: 'おはよう。きょうはいいてんきだね。', ko: '좋은 아침. 오늘 날씨 좋네.', time: '00:04' },
-  { jp: 'ねえ、ちょっと聞いてもいい？', reading: 'ねえ、ちょっときいてもいい？', ko: '저기, 잠깐 물어봐도 돼?', time: '00:12' },
-  { jp: 'もちろん。なんでも聞いて。', reading: 'もちろん。なんでもきいて。', ko: '물론이지. 뭐든 물어봐.', time: '00:19' },
-  { jp: 'この近くにおいしいカフェ、知らない？', reading: 'このちかくにおいしいカフェ、しらない？', ko: '이 근처에 맛있는 카페 알아?', time: '00:27' },
-  { jp: 'あるよ。駅の前のお店がおすすめ。', reading: 'あるよ。えきのまえのおみせがおすすめ。', ko: '있어. 역 앞 가게 추천해.', time: '00:35' },
-  { jp: 'じゃあ、一緒に行こうか。', reading: 'じゃあ、いっしょにいこうか。', ko: '그럼 같이 갈까?', time: '00:43' },
-]
-
-const SPEED_OPTIONS = [1, 0.75, 0.5]
 
 export default function StudyPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { data: videos, isLoading } = useVideos()
+  const videoId = Number(id)
 
-  const [sIdx, setSIdx] = useState(0)
-  const [playing, setPlaying] = useState(true)
-  const [recording, setRecording] = useState(false)
-  const [speed, setSpeed] = useState(1)
-  const [ab, setAb] = useState(false)
+  const { data: videos, isLoading: videosLoading } = useVideos()
+  const { data: sentences = [], isLoading: scriptsLoading } = useScripts(videoId)
 
-  if (isLoading) {
+  const total = sentences.length
+  const player = usePlayer(sentences)
+
+  if (videosLoading || scriptsLoading) {
     return (
       <div className="flex items-center justify-center h-[60vh] text-[#9a9a95] text-sm">
         불러오는 중...
@@ -38,7 +26,7 @@ export default function StudyPage() {
     )
   }
 
-  const video = videos?.find((v) => v.id === Number(id))
+  const video = videos?.find((v) => v.id === videoId)
   if (!video) {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
@@ -53,19 +41,8 @@ export default function StudyPage() {
     )
   }
 
-  const sentences = DUMMY_SENTENCES
-  const total = sentences.length
   const upNext = videos.filter((v) => v.id !== video.id).slice(0, 3)
-
-  const cycleSpeed = () => {
-    const next = SPEED_OPTIONS[(SPEED_OPTIONS.indexOf(speed) + 1) % SPEED_OPTIONS.length]
-    setSpeed(next)
-  }
-  const prevS = () => setSIdx((i) => Math.max(0, i - 1))
-  const nextS = () => setSIdx((i) => Math.min(total - 1, i + 1))
-
-  const speedLabel = speed.toFixed(2).replace(/0$/, '') + '×'
-  const progressPct = Math.round(((sIdx + 1) / total) * 100) + '%'
+  const current = total > 0 ? sentences[player.sIdx] : undefined
 
   return (
     <main className="max-w-[1320px] mx-auto px-6 pt-5 pb-20">
@@ -81,37 +58,40 @@ export default function StudyPage() {
         <div className="flex-1 min-w-0">
           <VideoStage
             video={video}
-            sentence={sentences[sIdx]}
-            playing={playing}
-            onTogglePlay={() => setPlaying((p) => !p)}
-            sNo={sIdx + 1}
+            sentence={current}
+            sNo={player.sNo}
             sTotal={total}
+            onReady={player.handleReady}
+            onStateChange={player.handleStateChange}
           />
           <TransportBar
-            playing={playing}
-            onTogglePlay={() => setPlaying((p) => !p)}
-            onPrev={prevS}
-            onNext={nextS}
-            speedLabel={speedLabel}
-            onCycleSpeed={cycleSpeed}
-            ab={ab}
-            onToggleAB={() => setAb((v) => !v)}
-            recording={recording}
-            onToggleRec={() => setRecording((v) => !v)}
-            progressPct={progressPct}
+            playing={player.playing}
+            onTogglePlay={player.togglePlay}
+            onPrev={player.prev}
+            onNext={player.next}
+            speedLabel={player.speedLabel}
+            onCycleSpeed={player.cycleSpeed}
+            ab={player.ab}
+            onToggleAB={player.toggleAB}
+            recording={player.recording}
+            onToggleRec={player.toggleRec}
+            progressPct={player.progressPct}
           />
-          <SentenceList
-            sentences={sentences}
-            currentIdx={sIdx}
-            onPick={(i) => {
-              setSIdx(i)
-              setPlaying(true)
-            }}
-          />
+          {total > 0 ? (
+            <SentenceList
+              sentences={sentences}
+              currentIdx={player.sIdx}
+              onPick={player.pick}
+            />
+          ) : (
+            <div className="mt-[22px] flex items-center justify-center h-32 text-[#9a9a95] text-sm border border-[#f0f0ea] rounded-[13px]">
+              등록된 스크립트가 없습니다.
+            </div>
+          )}
         </div>
 
         {/* 우측 */}
-        <PlayerSidebar video={video} sNo={sIdx + 1} sTotal={total} upNext={upNext} />
+        <PlayerSidebar video={video} sNo={player.sNo} sTotal={total} upNext={upNext} />
       </div>
     </main>
   )

@@ -18,10 +18,22 @@ export interface Video {
   sentences?: number
 }
 
-// 쉐도잉 문장 (스크립트 API 연동 전까지 더미)
+// 스크립트 (GET /api/videos/{id}/scripts) - 백엔드 응답 그대로
+export interface Script {
+  id: number
+  startTime: number
+  endTime: number
+  japaneseText: string
+  pronunciation: string | null
+  translation: string
+}
+
+// 쉐도잉 문장 (UI 렌더링용 - Script를 변환한 형태)
 export interface Sentence {
   jp: string
   reading?: string
   ko?: string
   time?: string
+  startTime: number
+  endTime: number
 }
