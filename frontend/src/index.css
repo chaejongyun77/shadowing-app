@@ -6,12 +6,28 @@
 
 body {
   margin: 0;
-  background-color: #0f0f0f;
-  color: #f1f1f1;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background-color: #ffffff;
+  color: #0f0f0f;
+  font-family: "Noto Sans KR", "Noto Sans JP", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100vh;
+}
+
+/* 일본어 전용 폰트 */
+.jp {
+  font-family: "Noto Sans JP", "Noto Sans KR", sans-serif;
+}
+
+/* 스크롤바 */
+.no-bar::-webkit-scrollbar { height: 0; width: 0; }
+.thin-bar::-webkit-scrollbar { height: 8px; }
+.thin-bar::-webkit-scrollbar-thumb { background: #e0e0dc; border-radius: 99px; }
+
+/* 녹음 펄스 애니메이션 */
+@keyframes recpulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 61, 0.45); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 77, 61, 0); }
 }
