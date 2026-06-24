@@ -3,6 +3,7 @@ import { useVideos } from '../hooks/useVideos'
 import { useScripts } from '../hooks/useScripts'
 import { usePlayer } from '../hooks/usePlayer'
 import VideoStage from '../components/player/VideoStage'
+import ScriptDisplay from '../components/player/ScriptDisplay'
 import TransportBar from '../components/player/TransportBar'
 import SentenceList from '../components/player/SentenceList'
 import PlayerSidebar from '../components/player/PlayerSidebar'
@@ -42,7 +43,6 @@ export default function StudyPage() {
   }
 
   const upNext = videos.filter((v) => v.id !== video.id).slice(0, 3)
-  const current = total > 0 ? sentences[player.sIdx] : undefined
 
   return (
     <main className="max-w-[1320px] mx-auto px-6 pt-5 pb-20">
@@ -58,12 +58,19 @@ export default function StudyPage() {
         <div className="flex-1 min-w-0">
           <VideoStage
             video={video}
-            sentence={current}
             sNo={player.sNo}
             sTotal={total}
             onReady={player.handleReady}
             onStateChange={player.handleStateChange}
           />
+
+          {/* 대본 영역 (TransportBar 위) */}
+          <ScriptDisplay
+            sentence={total > 0 ? sentences[player.sIdx] : undefined}
+            sNo={player.sNo}
+            sTotal={total}
+          />
+
           <TransportBar
             playing={player.playing}
             onTogglePlay={player.togglePlay}
@@ -77,6 +84,7 @@ export default function StudyPage() {
             onToggleRec={player.toggleRec}
             progressPct={player.progressPct}
           />
+
           {total > 0 ? (
             <SentenceList
               sentences={sentences}
