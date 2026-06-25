@@ -29,12 +29,18 @@ export function usePlayer(sentences: Sentence[]) {
   const [speed, setSpeed] = useState(1)
   const [ab, setAb] = useState(false)
 
+  // ab/sIdx도 폴링에서 최신 값 참조하기 위한 ref
+  const abRef = useRef(ab)
+  abRef.current = ab
+  const sIdxRef = useRef(sIdx)
+  sIdxRef.current = sIdx
+
   // 파생 값
   const sNo = total > 0 ? sIdx + 1 : 0
   const speedLabel = `${speed}×`
   const progressPct = total > 0 ? `${Math.round((sNo / total) * 100)}%` : '0%'
 
-  // 재생 중일 때 현재 시간을 추적해 해당 구간을 자동 하이라이트
+  // 재생 중일 때 현재 시간을 추적해 해당 구간을 자동 하이라이트 + A-B 반복 처리
   useEffect(() => {
     if (!playing) return
 
@@ -43,9 +49,19 @@ export function usePlayer(sentences: Sentence[]) {
       if (!player) return
 
       const t = await player.getCurrentTime()
-      const idx = sentencesRef.current.findIndex(
-        (s) => t >= s.startTime && t < s.endTime
-      )
+      const sentences = sentencesRef.current
+
+      // A-B 반복: 현재 구간의 endTime을 넘으면 startTime으로 되돌림
+      if (abRef.current) {
+        const current = sentences[sIdxRef.current]
+        if (current && t >= current.endTime - 0.1) {
+          player.seekTo(current.startTime, true)
+          return
+        }
+      }
+
+      // 자막 자동 동기화
+      const idx = sentences.findIndex((s) => t >= s.startTime && t < s.endTime)
       if (idx !== -1) {
         setSIdx((prev) => (prev === idx ? prev : idx))
       }

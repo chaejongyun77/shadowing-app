@@ -8,4 +8,15 @@ export const scriptApi = {
     )
     return response.data.data
   },
+
+  updateScript: async (
+    scriptId: number,
+    data: { startTime: number; endTime: number; translation: string }
+  ): Promise<Script> => {
+    const response = await apiClient.put<ApiResponse<Script>>(
+      `/scripts/${scriptId}`,
+      data
+    )
+    return response.data.data
+  },
 }

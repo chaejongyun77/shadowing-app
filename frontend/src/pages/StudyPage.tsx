@@ -46,12 +46,20 @@ export default function StudyPage() {
 
   return (
     <main className="max-w-[1320px] mx-auto px-6 pt-5 pb-20">
-      <button
-        onClick={() => navigate('/')}
-        className="inline-flex items-center gap-2 bg-none border-none text-[#65676b] font-semibold text-[14.5px] cursor-pointer py-2 mb-3.5 hover:text-[#0f0f0f]"
-      >
-        ‹ 홈으로
-      </button>
+      <div className="flex items-center justify-between mb-3.5">
+        <button
+          onClick={() => navigate('/')}
+          className="inline-flex items-center gap-2 bg-none border-none text-[#65676b] font-semibold text-[14.5px] cursor-pointer py-2 hover:text-[#0f0f0f]"
+        >
+          ‹ 홈으로
+        </button>
+        <button
+          onClick={() => navigate(`/study/${videoId}/edit`)}
+          className="inline-flex items-center gap-2 border border-[#ececE6] bg-white text-[#65676b] font-semibold text-[13.5px] px-4 py-2 rounded-[11px] cursor-pointer hover:border-[#ff4d3d] hover:text-[#ff4d3d]"
+        >
+          ✏️ 스크립트 수정
+        </button>
+      </div>
 
       <div className="player-cols flex gap-[30px] items-start max-[920px]:flex-col">
         {/* 좌측 */}
