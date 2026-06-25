@@ -37,10 +37,10 @@ export default function SentenceList({ sentences, currentIdx, onPick }: Sentence
                 {i + 1}
               </div>
               <div className="min-w-0 flex-1">
-                {s.reading && (
-                  <div className="jp text-[11.5px] text-[#a3a39d] mb-0.5">{s.reading}</div>
-                )}
-                <div className="jp font-bold text-base tracking-tight">{s.jp}</div>
+                <div
+                  className="jp font-bold text-base tracking-tight leading-[1.8]"
+                  dangerouslySetInnerHTML={{ __html: s.jp }}
+                />
                 {s.ko && <div className="text-[13.5px] text-[#65676b] mt-[3px]">{s.ko}</div>}
               </div>
               {s.time && (

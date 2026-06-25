@@ -21,6 +21,14 @@ body {
   font-family: "Noto Sans JP", "Noto Sans KR", sans-serif;
 }
 
+/* ruby/rt 요미가나 스타일 */
+rt {
+  font-size: 0.38em;
+  font-weight: 400;
+  color: #a3a39d;
+  letter-spacing: 0.04em;
+}
+
 /* 스크롤바 */
 .no-bar::-webkit-scrollbar { height: 0; width: 0; }
 .thin-bar::-webkit-scrollbar { height: 8px; }

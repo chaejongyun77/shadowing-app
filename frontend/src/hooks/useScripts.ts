@@ -10,9 +10,9 @@ const formatTime = (sec: number): string => {
 }
 
 // 백엔드 Script → UI Sentence 변환
+// japaneseText는 <ruby>한자<rt>히라가나</rt></ruby> 형태의 HTML 문자열
 const toSentence = (s: Script): Sentence => ({
   jp: s.japaneseText,
-  reading: s.pronunciation ?? undefined,
   ko: s.translation,
   time: formatTime(s.startTime),
   startTime: s.startTime,
