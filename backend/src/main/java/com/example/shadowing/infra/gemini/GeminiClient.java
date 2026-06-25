@@ -106,6 +106,11 @@ public class GeminiClient {
     }
 
     private String buildPrompt(List<YoutubeTranscriptResponse> transcripts) {
+        // Gemini에는 text만 넘김 (타임스탬프는 백엔드에서 직접 계산)
+        List<String> texts = transcripts.stream()
+                .map(YoutubeTranscriptResponse::text)
+                .toList();
+
         StringBuilder sb = new StringBuilder();
         sb.append("""
                 아래 일본어 자막 배열을 처리해서 JSON 배열로만 반환해줘.
@@ -114,20 +119,18 @@ public class GeminiClient {
                 처리 규칙:
                 1. 배경음/효과음 설명 제거: [BGM], [음악], [박수], (웃음소리) 등 대사가 아닌 항목은 결과 배열에서 완전히 제외해.
                 2. 긴 문장 분리: 한 항목의 text가 20자를 초과하면 자연스러운 의미 단위(조사/접속사 기준)로 분리해서 여러 항목으로 나눠줘.
-                   - start는 원본 start 그대로, duration은 분리된 비율에 맞게 나눠줘.
                    - 단, 짧은 감탄사나 단어(예: "あ", "えっ")는 분리하지 말고 그대로 둬.
                 3. japanese: 한자가 포함된 단어에 <ruby>한자<rt>히라가나</rt></ruby> 태그를 달아서 반환. 히라가나/가타카나는 태그 없이 그대로.
                 4. translation: 자연스러운 한국어로 번역.
-                5. start, duration은 위 규칙에 따라 조정된 값으로 반환.
                 
                 반환 형식 (입력보다 항목 수가 늘어나거나 줄어들 수 있음):
-                [{"japanese": "...", "translation": "...", "start": 0.0, "duration": 0.0}, ...]
+                [{"japanese": "...", "translation": "..."}, ...]
                 
                 입력 데이터:
                 """);
 
         try {
-            sb.append(objectMapper.writeValueAsString(transcripts));
+            sb.append(objectMapper.writeValueAsString(texts));
         } catch (Exception e) {
             throw new RuntimeException("프롬프트 생성 실패", e);
         }
