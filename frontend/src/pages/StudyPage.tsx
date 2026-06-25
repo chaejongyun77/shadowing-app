@@ -88,8 +88,6 @@ export default function StudyPage() {
             onCycleSpeed={player.cycleSpeed}
             ab={player.ab}
             onToggleAB={player.toggleAB}
-            recording={player.recording}
-            onToggleRec={player.toggleRec}
             progressPct={player.progressPct}
           />
 

@@ -13,8 +13,15 @@ export default function Header() {
           onClick={() => navigate('/')}
           className="flex items-center gap-2.5 cursor-pointer shrink-0"
         >
-          <div className="w-[30px] h-[30px] rounded-[9px] bg-[#ff4d3d] flex items-center justify-center shadow-[0_4px_12px_rgba(255,77,61,0.35)]">
-            <div className="w-0 h-0 border-y-[6px] border-y-transparent border-l-[10px] border-l-white ml-0.5" />
+          <div style={{ width: 32, height: 32, borderRadius: 10, background: '#ff4d3d', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(255,77,61,0.35)' }}>
+            <svg width="20" height="16" viewBox="0 0 24 20" fill="none">
+              {/* 입 모양 */}
+              <path d="M4 6 Q12 14 20 6" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+              <path d="M4 6 Q12 0 20 6" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.5"/>
+              {/* 좌우 음파 */}
+              <path d="M1 10 Q2.5 7 4 10 Q5.5 13 7 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.7"/>
+              <path d="M17 10 Q18.5 7 20 10 Q21.5 13 23 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.7"/>
+            </svg>
           </div>
           <span className="font-black text-[21px] tracking-tight">Shadowing</span>
         </div>
@@ -33,7 +40,6 @@ export default function Header() {
 
         {/* 우측 */}
         <div className="shrink-0 flex items-center gap-3.5">
-          <span className="text-[13px] text-[#65676b] font-medium">🔥 7일 연속</span>
           <div className="w-[38px] h-[38px] rounded-full bg-gradient-to-br from-[#ffb199] to-[#ff4d3d] border-2 border-white shadow-[0_0_0_1px_#efefea] cursor-pointer"
             onClick={() => navigate('/admin')}
             title="관리자 페이지"

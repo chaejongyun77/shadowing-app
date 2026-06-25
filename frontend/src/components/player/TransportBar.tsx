@@ -7,8 +7,6 @@ interface TransportBarProps {
   onCycleSpeed: () => void
   ab: boolean
   onToggleAB: () => void
-  recording: boolean
-  onToggleRec: () => void
   progressPct: string
 }
 
@@ -21,8 +19,6 @@ export default function TransportBar({
   onCycleSpeed,
   ab,
   onToggleAB,
-  recording,
-  onToggleRec,
   progressPct,
 }: TransportBarProps) {
   return (
@@ -67,14 +63,6 @@ export default function TransportBar({
 
         <div className="w-px h-[30px] bg-[#ededE7] mx-1" />
 
-        {/* 배속 */}
-        <button
-          onClick={onCycleSpeed}
-          className="h-11 px-4 rounded-[11px] border border-[#ececE6] bg-white cursor-pointer font-bold text-sm text-[#0f0f0f] hover:bg-[#faf9f6]"
-        >
-          {speedLabel}
-        </button>
-
         {/* A-B 반복 */}
         <button
           onClick={onToggleAB}
@@ -88,23 +76,6 @@ export default function TransportBar({
           A-B 반복
         </button>
 
-        <div className="flex-1" />
-
-        {/* 녹음 */}
-        <button
-          onClick={onToggleRec}
-          className="inline-flex items-center gap-2 h-11 px-[18px] rounded-[11px] cursor-pointer font-bold text-sm border-none text-white"
-          style={{
-            background: recording ? '#ff4d3d' : '#0f0f0f',
-            animation: recording ? 'recpulse 1.4s infinite' : 'none',
-          }}
-        >
-          <span
-            className="w-2.5 h-2.5 rounded-full inline-block"
-            style={{ background: recording ? '#fff' : '#ff4d3d' }}
-          />
-          {recording ? '녹음 중' : '내 발음 녹음'}
-        </button>
       </div>
 
       {/* 진행바 */}

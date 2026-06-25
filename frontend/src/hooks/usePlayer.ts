@@ -25,7 +25,6 @@ export function usePlayer(sentences: Sentence[]) {
 
   const [sIdx, setSIdx] = useState(0)
   const [playing, setPlaying] = useState(false)
-  const [recording, setRecording] = useState(false)
   const [speed, setSpeed] = useState(1)
   const [ab, setAb] = useState(false)
 
@@ -103,7 +102,6 @@ export function usePlayer(sentences: Sentence[]) {
     if (playing) player.pauseVideo()
     else player.playVideo()
   }
-  const toggleRec = () => setRecording((v) => !v)
   const toggleAB = () => setAb((v) => !v)
   const cycleSpeed = () =>
     setSpeed((s) => SPEED_OPTIONS[(SPEED_OPTIONS.indexOf(s) + 1) % SPEED_OPTIONS.length])
@@ -115,14 +113,12 @@ export function usePlayer(sentences: Sentence[]) {
     sIdx,
     sNo,
     playing,
-    recording,
     speedLabel,
     ab,
     progressPct,
     handleReady,
     handleStateChange,
     togglePlay,
-    toggleRec,
     toggleAB,
     cycleSpeed,
     prev,
