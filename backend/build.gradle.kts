@@ -30,6 +30,12 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testAnnotationProcessor("org.projectlombok:lombok")
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
+	// YouTube 자막 추출
+	implementation("io.github.thoroldvix:youtube-transcript-api:0.4.0")
+
+	// HTTP 클라이언트 (Gemini API 호출용)
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
 }
 
 tasks.withType<Test> {
