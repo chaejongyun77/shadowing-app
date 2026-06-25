@@ -3,8 +3,6 @@ interface TransportBarProps {
   onTogglePlay: () => void
   onPrev: () => void
   onNext: () => void
-  speedLabel: string
-  onCycleSpeed: () => void
   ab: boolean
   onToggleAB: () => void
   progressPct: string
@@ -15,8 +13,6 @@ export default function TransportBar({
   onTogglePlay,
   onPrev,
   onNext,
-  speedLabel,
-  onCycleSpeed,
   ab,
   onToggleAB,
   progressPct,

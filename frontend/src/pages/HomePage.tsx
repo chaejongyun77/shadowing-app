@@ -21,7 +21,7 @@ export default function HomePage() {
     )
   }
 
-  const hero = videos[0]
+  const hero = videos?.[0]
 
   return (
     <main className="max-w-[1320px] mx-auto px-6 pt-7 pb-20">
@@ -41,7 +41,7 @@ export default function HomePage() {
             모두 보기 ›
           </button>
         </div>
-        <VideoGrid videos={videos} />
+        <VideoGrid videos={videos ?? []} />
       </section>
     </main>
   )

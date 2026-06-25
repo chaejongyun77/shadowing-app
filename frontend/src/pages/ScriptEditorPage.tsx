@@ -2,7 +2,6 @@ import { useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import YouTube, { type YouTubeEvent, type YouTubePlayer } from 'react-youtube'
 import { useVideos } from '../hooks/useVideos'
-import { useScripts } from '../hooks/useScripts'
 import { scriptApi } from '../api/scriptApi'
 import ScriptEditorRow from '../components/editor/ScriptEditorRow'
 import type { Script } from '../types'
@@ -12,25 +11,16 @@ export default function ScriptEditorPage() {
   const navigate = useNavigate()
   const videoId = Number(id)
 
-  const { data: videos } = useVideos()
-  const { data: sentences = [], isLoading } = useScripts(videoId)
+  const { data: videos, isLoading } = useVideos()
   const video = videos?.find((v) => v.id === videoId)
 
   const playerRef = useRef<YouTubePlayer | null>(null)
   const [currentTime, setCurrentTime] = useState(0)
   const [openId, setOpenId] = useState<number | null>(null)
   const [dirtyIds, setDirtyIds] = useState<Set<number>>(new Set())
-  const [scripts, setScripts] = useState<Script[] | null>(null) // 수정된 스크립트 로컬 캐시
   const [isSaving, setIsSaving] = useState(false)
 
-  // sentences(Sentence[])를 Script[]로 역변환하기 위해 원본 스크립트를 별도 쿼리로 가져옴
-  const { data: rawScripts = [] } = useScripts(videoId)
-
-  // 원본 데이터를 Script 형태로 사용 (useScripts가 Sentence로 변환하므로 별도 상태 유지)
-  const [localScripts, setLocalScripts] = useState<Map<number, Script>>(new Map())
-
-  // rawScripts가 로드되면 localScripts 초기화
-  // (Sentence가 아닌 원본 Script 필요 → scriptApi 직접 사용)
+  // sentences(Sentence[])를 Script[]로 역변환하기 위해 scriptApi 직접 사용
   const [scriptList, setScriptList] = useState<Script[]>([])
 
   // 실제 Script 데이터 로딩 (scriptApi 직접 호출)

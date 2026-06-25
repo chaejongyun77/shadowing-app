@@ -2,11 +2,9 @@ import type { Sentence } from '../../types'
 
 interface ScriptDisplayProps {
   sentence?: Sentence
-  sNo: number
-  sTotal: number
 }
 
-export default function ScriptDisplay({ sentence, sNo, sTotal }: ScriptDisplayProps) {
+export default function ScriptDisplay({ sentence }: ScriptDisplayProps) {
   if (!sentence) return null
 
   return (

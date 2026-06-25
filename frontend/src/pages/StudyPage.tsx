@@ -42,7 +42,7 @@ export default function StudyPage() {
     )
   }
 
-  const upNext = videos.filter((v) => v.id !== video.id).slice(0, 3)
+  const upNext = (videos ?? []).filter((v) => v.id !== video.id).slice(0, 3)
 
   return (
     <main className="max-w-[1320px] mx-auto px-6 pt-5 pb-20">
@@ -75,8 +75,6 @@ export default function StudyPage() {
           {/* 대본 영역 (TransportBar 위) */}
           <ScriptDisplay
             sentence={total > 0 ? sentences[player.sIdx] : undefined}
-            sNo={player.sNo}
-            sTotal={total}
           />
 
           <TransportBar
@@ -84,8 +82,6 @@ export default function StudyPage() {
             onTogglePlay={player.togglePlay}
             onPrev={player.prev}
             onNext={player.next}
-            speedLabel={player.speedLabel}
-            onCycleSpeed={player.cycleSpeed}
             ab={player.ab}
             onToggleAB={player.toggleAB}
             progressPct={player.progressPct}
