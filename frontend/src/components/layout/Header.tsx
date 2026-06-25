@@ -34,7 +34,10 @@ export default function Header() {
         {/* 우측 */}
         <div className="shrink-0 flex items-center gap-3.5">
           <span className="text-[13px] text-[#65676b] font-medium">🔥 7일 연속</span>
-          <div className="w-[38px] h-[38px] rounded-full bg-gradient-to-br from-[#ffb199] to-[#ff4d3d] border-2 border-white shadow-[0_0_0_1px_#efefea]" />
+          <div className="w-[38px] h-[38px] rounded-full bg-gradient-to-br from-[#ffb199] to-[#ff4d3d] border-2 border-white shadow-[0_0_0_1px_#efefea] cursor-pointer"
+            onClick={() => navigate('/admin')}
+            title="관리자 페이지"
+          />
         </div>
       </div>
 
