@@ -18,14 +18,20 @@ public class ScriptService {
     private final VideoRepository videoRepository;
 
     public List<ScriptResponse> getScriptsByVideoId(Long videoId) {
-        // 잘못된 영상 ID 요청은 404로 구분 (빈 배열과 다른 의미)
         if (!videoRepository.existsById(videoId)) {
             throw new BusinessException(ErrorCode.VIDEO_NOT_FOUND);
         }
-
         return scriptRepository.findByVideoIdOrderByStartTimeAsc(videoId)
                 .stream()
                 .map(ScriptResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public ScriptResponse updateScript(Long scriptId, ScriptUpdateRequest request) {
+        Script script = scriptRepository.findById(scriptId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.SCRIPT_NOT_FOUND));
+        script.update(request.startTime(), request.endTime(), request.translation());
+        return ScriptResponse.from(script);
     }
 }
