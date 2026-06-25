@@ -35,4 +35,12 @@ public class Video {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    public static Video create(String youtubeVideoId, String title, String thumbnailUrl) {
+        Video video = new Video();
+        video.youtubeVideoId = youtubeVideoId;
+        video.title = title;
+        video.thumbnailUrl = thumbnailUrl;
+        return video;
+    }
 }

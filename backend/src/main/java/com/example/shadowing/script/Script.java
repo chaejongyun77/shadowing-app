@@ -52,4 +52,16 @@ public class Script {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    public static Script create(Video video, double startTime, double endTime,
+                                String japaneseText, String pronunciation, String translation) {
+        Script script = new Script();
+        script.video = video;
+        script.startTime = startTime;
+        script.endTime = endTime;
+        script.japaneseText = japaneseText;
+        script.pronunciation = pronunciation;
+        script.translation = translation;
+        return script;
+    }
 }
