@@ -18,7 +18,8 @@ public class VideoImportController {
     public ApiResponse<VideoImportResult> importVideo(@RequestBody VideoImportRequest request) {
         return ApiResponse.ok(videoImportService.importVideo(
                 request.youtubeVideoId(),
-                request.title()
+                request.title(),
+                request.category()
         ));
     }
 }

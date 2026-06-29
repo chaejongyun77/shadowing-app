@@ -7,6 +7,7 @@ import com.example.shadowing.infra.youtube.YoutubeTranscriptResponse;
 import com.example.shadowing.script.Script;
 import com.example.shadowing.script.ScriptRepository;
 import com.example.shadowing.video.Video;
+import com.example.shadowing.video.VideoCategory;
 import com.example.shadowing.video.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class VideoImportService {
     private final ScriptRepository scriptRepository;
 
     @Transactional
-    public VideoImportResult importVideo(String youtubeVideoId, String title) {
+    public VideoImportResult importVideo(String youtubeVideoId, String title, VideoCategory category) {
         log.info("영상 임포트 시작: videoId={}", youtubeVideoId);
 
         // 1. 자막 추출 + 타임스탬프 정규화 (겹침 제거)
@@ -45,7 +46,8 @@ public class VideoImportService {
         Video video = Video.create(
                 youtubeVideoId,
                 title,
-                "https://img.youtube.com/vi/" + youtubeVideoId + "/mqdefault.jpg"
+                "https://img.youtube.com/vi/" + youtubeVideoId + "/mqdefault.jpg",
+                category
         );
         videoRepository.save(video);
 

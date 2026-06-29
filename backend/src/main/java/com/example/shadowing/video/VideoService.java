@@ -13,9 +13,12 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
 
-    public List<VideoResponse> getVideos() {
-        return videoRepository.findAll()
-                .stream()
+    public List<VideoResponse> getVideos(VideoCategory category) {
+        List<Video> videos = (category == null)
+                ? videoRepository.findAll()
+                : videoRepository.findByCategory(category);
+
+        return videos.stream()
                 .map(VideoResponse::from)
                 .toList();
     }

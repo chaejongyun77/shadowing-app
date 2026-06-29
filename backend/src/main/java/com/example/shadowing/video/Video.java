@@ -2,6 +2,8 @@ package com.example.shadowing.video;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,15 +34,20 @@ public class Video {
     @Column(name = "thumbnail_url", length = 500)
     private String thumbnailUrl;
 
+    @Column(nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    private VideoCategory category = VideoCategory.OTHER;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public static Video create(String youtubeVideoId, String title, String thumbnailUrl) {
+    public static Video create(String youtubeVideoId, String title, String thumbnailUrl, VideoCategory category) {
         Video video = new Video();
         video.youtubeVideoId = youtubeVideoId;
         video.title = title;
         video.thumbnailUrl = thumbnailUrl;
+        video.category = category;
         return video;
     }
 }

@@ -7,6 +7,7 @@ public record VideoResponse(
         String youtubeVideoId,
         String title,
         String thumbnailUrl,
+        VideoCategory category,
         LocalDateTime createdAt
 ) {
     public static VideoResponse from(Video video) {
@@ -15,6 +16,7 @@ public record VideoResponse(
                 video.getYoutubeVideoId(),
                 video.getTitle(),
                 video.getThumbnailUrl(),
+                video.getCategory(),
                 video.getCreatedAt()
         );
     }
