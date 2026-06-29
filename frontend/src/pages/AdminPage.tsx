@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import apiClient from '../api/axios'
 
 type Status = 'idle' | 'loading' | 'done' | 'error'
 
@@ -26,7 +26,7 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null
 }
 
-export default function AdminPage() {
+export default function AdminPage(){
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
   const [title, setTitle] = useState('')
@@ -60,7 +60,7 @@ export default function AdminPage() {
     const t2 = setTimeout(() => setStep(2), 2400)
 
     try {
-      const res = await axios.post('/api/admin/videos/import', {
+      const res = await apiClient.post('/admin/videos/import', {
         youtubeVideoId: videoId,
         title: title.trim(),
       })
