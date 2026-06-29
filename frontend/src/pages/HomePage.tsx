@@ -1,9 +1,12 @@
+import { useSearchParams } from 'react-router-dom'
 import { useVideos } from '../hooks/useVideos'
 import HeroSection from '../components/video/HeroSection'
 import VideoGrid from '../components/video/VideoGrid'
 
 export default function HomePage() {
-  const { data: videos, isLoading, isError, error } = useVideos()
+  const [searchParams] = useSearchParams()
+  const category = searchParams.get('category') ?? undefined
+  const { data: videos, isLoading, isError, error } = useVideos(category)
 
   if (isLoading) {
     return (
@@ -25,10 +28,7 @@ export default function HomePage() {
 
   return (
     <main className="max-w-[1320px] mx-auto px-6 pt-7 pb-20">
-      {/* Hero */}
       {hero && <HeroSection video={hero} />}
-
-      {/* 그리드 섹션 */}
       <section>
         <div className="flex items-end justify-between mb-[18px]">
           <div>
@@ -37,9 +37,6 @@ export default function HomePage() {
             </div>
             <h2 className="m-0 text-[23px] font-extrabold tracking-tight">학습 영상</h2>
           </div>
-          <button className="bg-none border-none text-[#65676b] font-semibold text-sm cursor-pointer">
-            모두 보기 ›
-          </button>
         </div>
         <VideoGrid videos={videos ?? []} />
       </section>

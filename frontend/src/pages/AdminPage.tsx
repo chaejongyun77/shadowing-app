@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import apiClient from '../api/axios'
+import { CATEGORY_LABELS, type VideoCategory } from '../types'
 
 type Status = 'idle' | 'loading' | 'done' | 'error'
 
@@ -30,6 +31,7 @@ export default function AdminPage(){
   const navigate = useNavigate()
   const [url, setUrl] = useState('')
   const [title, setTitle] = useState('')
+  const [category, setCategory] = useState<VideoCategory>('OTHER')
   const [status, setStatus] = useState<Status>('idle')
   const [step, setStep] = useState(0)
   const [result, setResult] = useState<ImportResult | null>(null)
@@ -63,6 +65,7 @@ export default function AdminPage(){
       const res = await apiClient.post('/admin/videos/import', {
         youtubeVideoId: videoId,
         title: title.trim(),
+        category,
       })
       clearTimeout(t1)
       clearTimeout(t2)
@@ -136,6 +139,33 @@ export default function AdminPage(){
               disabled={isLoading}
               className="w-full h-[52px] border border-[#ececE6] rounded-[13px] px-4 text-[15px] bg-[#fafaf7] outline-none focus:border-[#ff4d3d] focus:bg-white disabled:opacity-50"
             />
+          </div>
+
+          {/* 카테고리 선택 */}
+          <div className="mb-[26px]">
+            <label className="block text-[13.5px] font-bold text-[#0f0f0f] mb-2">
+              카테고리
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(CATEGORY_LABELS)
+                .filter(([key]) => key !== 'ALL')
+                .map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setCategory(key as VideoCategory)}
+                    disabled={isLoading}
+                    className="px-4 py-2 rounded-[11px] text-[13.5px] font-semibold border transition-colors cursor-pointer"
+                    style={{
+                      background: category === key ? '#ff4d3d' : '#fff',
+                      color: category === key ? '#fff' : '#3f4042',
+                      borderColor: category === key ? '#ff4d3d' : '#ececE6',
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+            </div>
           </div>
 
           {/* 등록 버튼 */}

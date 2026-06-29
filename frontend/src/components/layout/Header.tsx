@@ -1,9 +1,20 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { CATEGORY_LABELS } from '../../types'
 
-const CHIPS = ['전체', '애니메이션', '드라마', 'JLPT', '회화', '발음', '비즈니스', '여행']
+const CHIPS = Object.entries(CATEGORY_LABELS) // [['ALL','전체'], ['ANIME','애니메이션'], ...]
 
 export default function Header() {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const activeCategory = searchParams.get('category') ?? 'ALL'
+
+  const handleChip = (key: string) => {
+    if (key === 'ALL') {
+      setSearchParams({})
+    } else {
+      setSearchParams({ category: key })
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/[0.86] backdrop-blur-md backdrop-saturate-150 border-b border-[#efefea]">
@@ -15,10 +26,8 @@ export default function Header() {
         >
           <div style={{ width: 32, height: 32, borderRadius: 10, background: '#ff4d3d', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(255,77,61,0.35)' }}>
             <svg width="20" height="16" viewBox="0 0 24 20" fill="none">
-              {/* 입 모양 */}
               <path d="M4 6 Q12 14 20 6" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
               <path d="M4 6 Q12 0 20 6" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.5"/>
-              {/* 좌우 음파 */}
               <path d="M1 10 Q2.5 7 4 10 Q5.5 13 7 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.7"/>
               <path d="M17 10 Q18.5 7 20 10 Q21.5 13 23 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.7"/>
             </svg>
@@ -49,18 +58,22 @@ export default function Header() {
 
       {/* 카테고리 칩 */}
       <div className="no-bar max-w-[1320px] mx-auto px-6 pb-3 flex gap-2.5 overflow-x-auto">
-        {CHIPS.map((chip, i) => (
-          <button
-            key={chip}
-            className={`shrink-0 text-[13.5px] px-[15px] py-2 rounded-full whitespace-nowrap border transition-colors ${
-              i === 0
-                ? 'font-bold bg-[#0f0f0f] text-white border-[#0f0f0f]'
-                : 'font-medium bg-[#f5f5f1] text-[#3f4042] border-[#ececE6] hover:bg-[#ececE6]'
-            }`}
-          >
-            {chip}
-          </button>
-        ))}
+        {CHIPS.map(([key, label]) => {
+          const active = activeCategory === key
+          return (
+            <button
+              key={key}
+              onClick={() => handleChip(key)}
+              className={`shrink-0 text-[13.5px] px-[15px] py-2 rounded-full whitespace-nowrap border transition-colors cursor-pointer ${
+                active
+                  ? 'font-bold bg-[#0f0f0f] text-white border-[#0f0f0f]'
+                  : 'font-medium bg-[#f5f5f1] text-[#3f4042] border-[#ececE6] hover:bg-[#ececE6]'
+              }`}
+            >
+              {label}
+            </button>
+          )
+        })}
       </div>
     </header>
   )

@@ -5,14 +5,26 @@ export interface ApiResponse<T> {
   message: string | null
 }
 
+// 카테고리 Enum (백엔드 VideoCategory와 일치)
+export type VideoCategory = 'ANIME' | 'DRAMA' | 'MOVIE' | 'EDUCATION' | 'OTHER'
+
+export const CATEGORY_LABELS: Record<string, string> = {
+  ALL:       '전체',
+  ANIME:     '애니메이션',
+  DRAMA:     '드라마',
+  MOVIE:     '영화',
+  EDUCATION: '교육',
+  OTHER:     '기타',
+}
+
 // 영상 (GET /api/videos)
 export interface Video {
   id: number
   youtubeVideoId: string
   title: string
   thumbnailUrl: string | null
+  category: VideoCategory
   createdAt: string
-  // 추가 예정 (옵셔널)
   duration?: string
   views?: string
   sentences?: number

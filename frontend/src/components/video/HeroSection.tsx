@@ -37,9 +37,7 @@ export default function HeroSection({ video }: HeroSectionProps) {
             <div className="w-0 h-0 border-y-[7px] border-y-transparent border-l-[11px] border-l-white" />
             지금 쉐도잉 시작
           </button>
-          <button className="inline-flex items-center gap-2.5 bg-white text-[#0f0f0f] border-[1.5px] border-[#e6e6e0] font-semibold text-base px-6 py-[15px] rounded-[14px] cursor-pointer hover:bg-[#faf9f6] transition">
-            ＋ 저장
-          </button>
+
         </div>
       </div>
 
