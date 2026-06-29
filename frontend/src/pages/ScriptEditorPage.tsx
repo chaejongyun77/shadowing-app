@@ -58,14 +58,14 @@ export default function ScriptEditorPage() {
     scriptId: number,
     startTime: number,
     endTime: number,
+    japaneseText: string,
     translation: string
   ) => {
     setOpenId(null)
     setDirtyIds((prev) => new Set(prev).add(scriptId))
-    // 로컬 상태 업데이트
     setScriptList((prev) =>
       prev.map((s) =>
-        s.id === scriptId ? { ...s, startTime, endTime, translation } : s
+        s.id === scriptId ? { ...s, startTime, endTime, japaneseText, translation } : s
       )
     )
   }
@@ -81,6 +81,7 @@ export default function ScriptEditorPage() {
             scriptApi.updateScript(s.id, {
               startTime: s.startTime,
               endTime: s.endTime,
+              japaneseText: s.japaneseText,
               translation: s.translation,
             })
           )

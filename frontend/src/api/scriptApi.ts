@@ -11,7 +11,7 @@ export const scriptApi = {
 
   updateScript: async (
     scriptId: number,
-    data: { startTime: number; endTime: number; translation: string }
+    data: { startTime: number; endTime: number; japaneseText: string; translation: string }
   ): Promise<Script> => {
     const response = await apiClient.put<ApiResponse<Script>>(
       `/scripts/${scriptId}`,

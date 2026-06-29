@@ -65,9 +65,10 @@ public class Script {
         return script;
     }
 
-    public void update(double startTime, double endTime, String translation) {
+    public void update(double startTime, double endTime, String japaneseText, String translation) {
         this.startTime = startTime;
         this.endTime = endTime;
+        this.japaneseText = japaneseText;
         this.translation = translation;
     }
 }

@@ -8,7 +8,7 @@ interface ScriptEditorRowProps {
   isDirty: boolean
   currentTime: number
   onToggle: () => void
-  onDone: (id: number, startTime: number, endTime: number, translation: string) => void
+  onDone: (id: number, startTime: number, endTime: number, japaneseText: string, translation: string) => void
 }
 
 // 컴포넌트 외부 순수 함수
@@ -59,6 +59,7 @@ export default function ScriptEditorRow({
 }: ScriptEditorRowProps) {
   const [startTime, setStartTime] = useState(toFixed2(script.startTime))
   const [endTime, setEndTime] = useState(toFixed2(script.endTime))
+  const [japaneseText, setJapaneseText] = useState(script.japaneseText)
   const [translation, setTranslation] = useState(script.translation)
   const rowRef = useRef<HTMLDivElement>(null)
 
@@ -66,6 +67,7 @@ export default function ScriptEditorRow({
   useEffect(() => {
     setStartTime(toFixed2(script.startTime))
     setEndTime(toFixed2(script.endTime))
+    setJapaneseText(script.japaneseText)
     setTranslation(script.translation)
   }, [script])
 
@@ -131,14 +133,26 @@ export default function ScriptEditorRow({
           className="px-[18px] pb-[18px] pt-1 border-t border-[#ffe1da]"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* 일본어 원문 (읽기 전용) */}
+          {/* 일본어 원문 (HTML 직접 편집) */}
           <div className="mb-[14px]">
             <div className="text-[12px] font-bold text-[#65676b] mb-1.5">
-              일본어 원문 <span className="text-[#b0b0a9] font-normal">· 읽기 전용</span>
+              일본어 원문
+              <span className="text-[#b0b0a9] font-normal ml-1">
+                · ruby 태그 포함 HTML 직접 수정 가능
+              </span>
             </div>
+            <textarea
+              rows={3}
+              value={japaneseText}
+              onChange={(e) => setJapaneseText(e.target.value)}
+              className="w-full border border-[#ececE6] rounded-[11px] px-[14px] py-[11px] text-[13.5px] font-mono leading-relaxed bg-[#fafaf7] outline-none focus:border-[#ff4d3d] focus:bg-white resize-y"
+              spellCheck={false}
+            />
+            {/* 미리보기 */}
+            <div className="mt-2 text-[11.5px] text-[#b0b0a9] mb-1">미리보기</div>
             <div
-              className="jp text-[16px] font-bold bg-[#f5f5f1] border border-[#ececE6] rounded-[11px] px-[14px] py-3 text-[#3f4042] leading-[1.9]"
-              dangerouslySetInnerHTML={{ __html: script.japaneseText }}
+              className="jp text-[15px] font-bold bg-[#f5f5f1] border border-[#ececE6] rounded-[11px] px-[14px] py-3 text-[#3f4042] leading-[1.9]"
+              dangerouslySetInnerHTML={{ __html: japaneseText }}
             />
           </div>
 
@@ -172,7 +186,7 @@ export default function ScriptEditorRow({
           {/* 완료 */}
           <div className="flex justify-end">
             <button
-              onClick={() => onDone(script.id, parseFloat(startTime), parseFloat(endTime), translation)}
+              onClick={() => onDone(script.id, parseFloat(startTime), parseFloat(endTime), japaneseText, translation)}
               className="bg-[#ff4d3d] text-white border-none font-bold text-[14px] px-[26px] py-[11px] rounded-[11px] cursor-pointer shadow-[0_8px_18px_-8px_rgba(255,77,61,0.5)]"
             >
               완료

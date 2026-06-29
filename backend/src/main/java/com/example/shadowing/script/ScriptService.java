@@ -31,7 +31,7 @@ public class ScriptService {
     public ScriptResponse updateScript(Long scriptId, ScriptUpdateRequest request) {
         Script script = scriptRepository.findById(scriptId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.SCRIPT_NOT_FOUND));
-        script.update(request.startTime(), request.endTime(), request.translation());
+        script.update(request.startTime(), request.endTime(), request.japaneseText(), request.translation());
         return ScriptResponse.from(script);
     }
 }
