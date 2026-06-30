@@ -76,6 +76,20 @@ public class Script {
         return script;
     }
 
+    /**
+     * 관리자가 수동으로 구간을 추가할 때 사용 (wordNotes/grammarNotes 없이 생성)
+     */
+    public static Script createManual(Video video, double startTime, double endTime,
+                                      String japaneseText, String translation) {
+        Script script = new Script();
+        script.video = video;
+        script.startTime = startTime;
+        script.endTime = endTime;
+        script.japaneseText = japaneseText;
+        script.translation = translation;
+        return script;
+    }
+
     public void update(double startTime, double endTime, String japaneseText, String translation) {
         this.startTime = startTime;
         this.endTime = endTime;

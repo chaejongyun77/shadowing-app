@@ -70,6 +70,40 @@ export default function ScriptEditorPage() {
     )
   }
 
+  const handleDelete = async (scriptId: number) => {
+    try {
+      await scriptApi.deleteScript(scriptId)
+      setScriptList((prev) => prev.filter((s) => s.id !== scriptId))
+      setDirtyIds((prev) => {
+        const next = new Set(prev)
+        next.delete(scriptId)
+        return next
+      })
+      if (openId === scriptId) setOpenId(null)
+    } catch (e) {
+      alert('삭제 중 오류가 발생했습니다.')
+    }
+  }
+
+  const handleAddScript = async () => {
+    const lastScript = scriptList[scriptList.length - 1]
+    const newStart = lastScript ? lastScript.endTime : 0
+    const newEnd = newStart + 2 // 기본 2초 구간
+
+    try {
+      const created = await scriptApi.createScript(videoId, {
+        startTime: newStart,
+        endTime: newEnd,
+        japaneseText: '새 구간',
+        translation: '',
+      })
+      setScriptList((prev) => [...prev, created])
+      setOpenId(created.id) // 추가하자마자 편집 모드로 열기
+    } catch (e) {
+      alert('구간 추가 중 오류가 발생했습니다.')
+    }
+  }
+
   const handleSaveAll = async () => {
     if (dirtyIds.size === 0) return
     setIsSaving(true)
@@ -200,7 +234,7 @@ export default function ScriptEditorPage() {
             <span className="text-[13.5px]">클릭하면 해당 구간을 편집할 수 있어요</span>
           </div>
 
-          <div className="flex flex-col gap-[11px] pb-6">
+          <div className="flex flex-col gap-[11px] pb-4">
             {scriptList.map((script, i) => (
               <ScriptEditorRow
                 key={script.id}
@@ -211,9 +245,18 @@ export default function ScriptEditorPage() {
                 currentTime={currentTime}
                 onToggle={() => setOpenId((prev) => (prev === script.id ? null : script.id))}
                 onDone={handleDone}
+                onDelete={handleDelete}
               />
             ))}
           </div>
+
+          {/* 구간 추가 */}
+          <button
+            onClick={handleAddScript}
+            className="w-full mt-1 mb-6 border-2 border-dashed border-[#ececE6] rounded-[16px] py-4 text-[#9a9a95] font-bold text-[14px] cursor-pointer hover:border-[#ff4d3d] hover:text-[#ff4d3d] hover:bg-[#fff6f4] transition-colors"
+          >
+            + 구간 추가
+          </button>
         </div>
       </main>
 

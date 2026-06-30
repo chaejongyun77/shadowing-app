@@ -19,4 +19,19 @@ export const scriptApi = {
     )
     return response.data.data
   },
+
+  createScript: async (
+    videoId: number,
+    data: { startTime: number; endTime: number; japaneseText: string; translation: string }
+  ): Promise<Script> => {
+    const response = await apiClient.post<ApiResponse<Script>>(
+      `/videos/${videoId}/scripts`,
+      data
+    )
+    return response.data.data
+  },
+
+  deleteScript: async (scriptId: number): Promise<void> => {
+    await apiClient.delete(`/scripts/${scriptId}`)
+  },
 }

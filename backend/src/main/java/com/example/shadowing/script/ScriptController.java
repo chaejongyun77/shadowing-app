@@ -25,4 +25,18 @@ public class ScriptController {
     ) {
         return ApiResponse.ok(scriptService.updateScript(scriptId, request));
     }
+
+    @PostMapping("/videos/{videoId}/scripts")
+    public ApiResponse<ScriptResponse> createScript(
+            @PathVariable Long videoId,
+            @RequestBody ScriptCreateRequest request
+    ) {
+        return ApiResponse.ok(scriptService.createScript(videoId, request));
+    }
+
+    @DeleteMapping("/scripts/{scriptId}")
+    public ApiResponse<Void> deleteScript(@PathVariable Long scriptId) {
+        scriptService.deleteScript(scriptId);
+        return ApiResponse.ok(null);
+    }
 }

@@ -9,6 +9,7 @@ interface ScriptEditorRowProps {
   currentTime: number
   onToggle: () => void
   onDone: (id: number, startTime: number, endTime: number, japaneseText: string, translation: string) => void
+  onDelete: (id: number) => void
 }
 
 // 컴포넌트 외부 순수 함수
@@ -56,6 +57,7 @@ export default function ScriptEditorRow({
   currentTime,
   onToggle,
   onDone,
+  onDelete,
 }: ScriptEditorRowProps) {
   const [startTime, setStartTime] = useState(toFixed2(script.startTime))
   const [endTime, setEndTime] = useState(toFixed2(script.endTime))
@@ -183,8 +185,18 @@ export default function ScriptEditorRow({
             />
           </div>
 
-          {/* 완료 */}
-          <div className="flex justify-end">
+          {/* 완료 / 삭제 */}
+          <div className="flex justify-between items-center">
+            <button
+              onClick={() => {
+                if (window.confirm('이 구간을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                  onDelete(script.id)
+                }
+              }}
+              className="bg-white text-[#ff4d3d] border border-[#ffccc4] font-bold text-[13.5px] px-[18px] py-[10px] rounded-[11px] cursor-pointer hover:bg-[#fff0ee]"
+            >
+              🗑 구간 삭제
+            </button>
             <button
               onClick={() => onDone(script.id, parseFloat(startTime), parseFloat(endTime), japaneseText, translation)}
               className="bg-[#ff4d3d] text-white border-none font-bold text-[14px] px-[26px] py-[11px] rounded-[11px] cursor-pointer shadow-[0_8px_18px_-8px_rgba(255,77,61,0.5)]"
