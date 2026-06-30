@@ -9,6 +9,7 @@ import com.example.shadowing.script.ScriptRepository;
 import com.example.shadowing.video.Video;
 import com.example.shadowing.video.VideoCategory;
 import com.example.shadowing.video.VideoRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class VideoImportService {
     private final GeminiClient geminiClient;
     private final VideoRepository videoRepository;
     private final ScriptRepository scriptRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public VideoImportResult importVideo(String youtubeVideoId, String title, VideoCategory category) {
@@ -36,7 +38,7 @@ public class VideoImportService {
         List<YoutubeTranscriptResponse> transcripts = youtubeTranscriptClient.extract(youtubeVideoId);
         log.info("자막 {}개 추출 완료", transcripts.size());
 
-        // 2. Gemini로 요미가나 + 번역 가공 (청크 단위, 텍스트만 전달)
+        // 2. Gemini로 요미가나 + 번역 + 단어/문법 노트 가공 (청크 단위, 텍스트만 전달)
         log.info("2단계: Gemini 가공 중...");
         List<GeminiEnrichResponse> enriched = geminiClient.enrich(transcripts);
         log.info("Gemini 가공 완료: {}개 → {}개 (분리/제외 반영)", transcripts.size(), enriched.size());
@@ -51,7 +53,7 @@ public class VideoImportService {
         );
         videoRepository.save(video);
 
-        // 4. start/end 계산 후 Script 저장
+        // 4. start/end 계산 후 Script 저장 (단어/문법 노트는 JSON 문자열로 직렬화)
         List<Script> scripts = assignTimestamps(enriched, transcripts).stream()
                 .map(ts -> Script.create(
                         video,
@@ -59,7 +61,9 @@ public class VideoImportService {
                         ts.end(),
                         ts.japanese(),
                         null,
-                        ts.translation()
+                        ts.translation(),
+                        toJson(ts.wordNotes()),
+                        toJson(ts.grammarNotes())
                 ))
                 .toList();
         scriptRepository.saveAll(scripts);
@@ -108,11 +112,31 @@ public class VideoImportService {
                 end = start + slice;
             }
 
-            result.add(new TimestampedScript(seg.japanese(), seg.translation(), start, end));
+            result.add(new TimestampedScript(
+                    seg.japanese(), seg.translation(), start, end,
+                    seg.wordNotes(), seg.grammarNotes()
+            ));
         }
 
         return result;
     }
 
-    private record TimestampedScript(String japanese, String translation, double start, double end) {}
+    private String toJson(Object obj) {
+        if (obj == null) return null;
+        try {
+            return objectMapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            log.warn("단어/문법 노트 직렬화 실패: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    private record TimestampedScript(
+            String japanese,
+            String translation,
+            double start,
+            double end,
+            List<GeminiEnrichResponse.WordNoteResponse> wordNotes,
+            List<GeminiEnrichResponse.GrammarNoteResponse> grammarNotes
+    ) {}
 }

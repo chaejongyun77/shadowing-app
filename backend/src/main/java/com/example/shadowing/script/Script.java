@@ -49,12 +49,21 @@ public class Script {
     @Column(nullable = false)
     private String translation;
 
+    @Lob
+    @Column(name = "word_notes")
+    private String wordNotes;       // JSON 문자열 (List<WordNote> 직렬화)
+
+    @Lob
+    @Column(name = "grammar_notes")
+    private String grammarNotes;    // JSON 문자열 (List<GrammarNote> 직렬화)
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     public static Script create(Video video, double startTime, double endTime,
-                                String japaneseText, String pronunciation, String translation) {
+                                String japaneseText, String pronunciation, String translation,
+                                String wordNotes, String grammarNotes) {
         Script script = new Script();
         script.video = video;
         script.startTime = startTime;
@@ -62,6 +71,8 @@ public class Script {
         script.japaneseText = japaneseText;
         script.pronunciation = pronunciation;
         script.translation = translation;
+        script.wordNotes = wordNotes;
+        script.grammarNotes = grammarNotes;
         return script;
     }
 
