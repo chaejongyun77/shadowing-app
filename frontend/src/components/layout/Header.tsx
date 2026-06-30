@@ -32,7 +32,7 @@ export default function Header() {
               <path d="M17 10 Q18.5 7 20 10 Q21.5 13 23 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.7"/>
             </svg>
           </div>
-          <span className="font-black text-[21px] tracking-tight">Shadowing</span>
+          <span className="font-black text-[21px] tracking-tight">쉐도잉</span>
         </div>
 
         {/* 검색바 */}
@@ -42,7 +42,7 @@ export default function Header() {
             <line x1="16.5" y1="16.5" x2="21" y2="21" />
           </svg>
           <input
-            placeholder="일본어 영상, JLPT, 회화 검색"
+            placeholder="일본어 영상 검색"
             className="border-none bg-transparent outline-none text-[14.5px] w-full text-[#0f0f0f]"
           />
         </div>

@@ -33,7 +33,6 @@ export default function HomePage() {
         <div className="flex items-end justify-between mb-[18px]">
           <div>
             <div className="text-[11.5px] font-bold tracking-[0.12em] text-[#ff4d3d] uppercase mb-[5px]">
-              그리드 · Grid
             </div>
             <h2 className="m-0 text-[23px] font-extrabold tracking-tight">학습 영상</h2>
           </div>
