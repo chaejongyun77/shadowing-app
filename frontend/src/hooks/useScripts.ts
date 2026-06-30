@@ -17,6 +17,8 @@ const toSentence = (s: Script): Sentence => ({
   time: formatTime(s.startTime),
   startTime: s.startTime,
   endTime: s.endTime,
+  wordNotes: s.wordNotes,
+  grammarNotes: s.grammarNotes,
 })
 
 export const useScripts = (videoId: number) => {

@@ -5,6 +5,7 @@ import { usePlayer } from '../hooks/usePlayer'
 import VideoStage from '../components/player/VideoStage'
 import ScriptDisplay from '../components/player/ScriptDisplay'
 import TransportBar from '../components/player/TransportBar'
+import WordGrammarPanel from '../components/player/WordGrammarPanel'
 import SentenceList from '../components/player/SentenceList'
 import PlayerSidebar from '../components/player/PlayerSidebar'
 
@@ -86,6 +87,15 @@ export default function StudyPage() {
             onToggleAB={player.toggleAB}
             progressPct={player.progressPct}
           />
+
+          {/* 이 구간 단어·문법 */}
+          {total > 0 && (
+            <WordGrammarPanel
+              wordNotes={sentences[player.sIdx]?.wordNotes}
+              grammarNotes={sentences[player.sIdx]?.grammarNotes}
+              sNo={player.sNo}
+            />
+          )}
 
           {total > 0 ? (
             <SentenceList
